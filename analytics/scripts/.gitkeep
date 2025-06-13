@@ -1,1 +1,175 @@
-ÿþ
+#!/usr/bin/env python3
+"""Funnel Performance Metrics Tracker
+
+This script generates synthetic funnel data and computes key performance
+metrics such as Click-Through Rate (CTR), Bounce Rate, and Conversion Rate.
+It can be extended to load real data by replacing the synthetic data
+creation step with CSV or database loading logic.
+"""
+
+from __future__ import annotations
+
+import argparse
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import List
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+
+@dataclass
+class FunnelDay:
+    """Represents funnel data for a single day."""
+
+    date: datetime
+    impressions: int
+    clicks: int
+    visits: int
+    bounces: int
+    conversions: int
+
+
+@dataclass
+class Metrics:
+    """Computed performance metrics."""
+
+    ctr: float
+    bounce_rate: float
+    conversion_rate: float
+
+
+def generate_synthetic_data(days: int = 30, seed: int | None = None) -> List[FunnelDay]:
+    """Generate synthetic funnel data for a number of days."""
+    rng = np.random.default_rng(seed)
+    start_date = datetime.utcnow() - timedelta(days=days)
+    data = []
+    for i in range(days):
+        date = start_date + timedelta(days=i)
+        impressions = rng.integers(1000, 5000)
+        clicks = int(impressions * rng.uniform(0.05, 0.15))
+        visits = int(clicks * rng.uniform(0.7, 0.95))
+        bounce_rate = rng.uniform(0.2, 0.6)
+        bounces = int(visits * bounce_rate)
+        conversions = int(visits * rng.uniform(0.01, 0.1))
+        data.append(
+            FunnelDay(
+                date=date,
+                impressions=int(impressions),
+                clicks=int(clicks),
+                visits=int(visits),
+                bounces=int(bounces),
+                conversions=int(conversions),
+            )
+        )
+    return data
+
+
+def calculate_metrics(df: pd.DataFrame) -> Metrics:
+    """Calculate CTR, bounce rate, and conversion rate from a dataframe."""
+    ctr = df["clicks"].sum() / df["impressions"].sum()
+    bounce_rate = df["bounces"].sum() / df["visits"].sum()
+    conversion_rate = df["conversions"].sum() / df["visits"].sum()
+    return Metrics(ctr=ctr, bounce_rate=bounce_rate, conversion_rate=conversion_rate)
+
+
+def plot_metrics(df: pd.DataFrame, output_dir: Path) -> None:
+    """Create line plots for daily CTR, bounce rate, and conversion rate."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    df.set_index("date", inplace=False)["ctr"].plot(ax=ax)
+    ax.set_title("Daily Click-Through Rate")
+    ax.set_ylabel("CTR")
+    ax.set_xlabel("Date")
+    fig.tight_layout()
+    fig.savefig(output_dir / "ctr.png")
+    plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    df.set_index("date", inplace=False)["bounce_rate"].plot(ax=ax, color="orange")
+    ax.set_title("Daily Bounce Rate")
+    ax.set_ylabel("Bounce Rate")
+    ax.set_xlabel("Date")
+    fig.tight_layout()
+    fig.savefig(output_dir / "bounce_rate.png")
+    plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    df.set_index("date", inplace=False)["conversion_rate"].plot(ax=ax, color="green")
+    ax.set_title("Daily Conversion Rate")
+    ax.set_ylabel("Conversion Rate")
+    ax.set_xlabel("Date")
+    fig.tight_layout()
+    fig.savefig(output_dir / "conversion_rate.png")
+    plt.close(fig)
+
+
+def create_dataframe(data: List[FunnelDay]) -> pd.DataFrame:
+    """Convert a list of FunnelDay entries into a pandas DataFrame with metrics."""
+    df = pd.DataFrame(
+        [
+            {
+                "date": item.date,
+                "impressions": item.impressions,
+                "clicks": item.clicks,
+                "visits": item.visits,
+                "bounces": item.bounces,
+                "conversions": item.conversions,
+            }
+            for item in data
+        ]
+    )
+
+    # Calculate daily metrics
+    df["ctr"] = df["clicks"] / df["impressions"]
+    df["bounce_rate"] = df["bounces"] / df["visits"]
+    df["conversion_rate"] = df["conversions"] / df["visits"]
+    return df
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Funnel performance tracker")
+    parser.add_argument(
+        "--days",
+        type=int,
+        default=30,
+        help="Number of days of synthetic data to generate",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("analytics_output"),
+        help="Directory where plots will be saved",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="Random seed for reproducible synthetic data",
+    )
+
+    args = parser.parse_args()
+
+    # Generate or load data
+    data = generate_synthetic_data(days=args.days, seed=args.seed)
+    df = create_dataframe(data)
+
+    # Aggregate metrics
+    metrics = calculate_metrics(df)
+
+    # Output summary
+    print("Aggregate Metrics for last", args.days, "days")
+    print(f"CTR: {metrics.ctr:.2%}")
+    print(f"Bounce Rate: {metrics.bounce_rate:.2%}")
+    print(f"Conversion Rate: {metrics.conversion_rate:.2%}")
+
+    # Plot metrics
+    plot_metrics(df, args.output)
+    print(f"Plots saved to {args.output.resolve()}")
+
+
+if __name__ == "__main__":
+    main()
