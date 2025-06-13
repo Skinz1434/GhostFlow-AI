@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -26,3 +26,11 @@ jobs:
         run: |
           chmod +x ./scripts/setup.sh || true
           ./scripts/setup.sh || echo "Setup script not found or not executable"
+
+      - name: Commit and push generated scripts explicitly
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "🚀 Automatically add generated scripts via GitHub Actions" || echo "No changes to commit"
+          git push origin main
