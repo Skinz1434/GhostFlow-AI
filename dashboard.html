@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GhostFlow AI Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      color: #4CAF50;
+    }
+    .status {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>GhostFlow AI Dashboard</h1>
+  <div id="metrics"></div>
+  <div id="revenue"></div>
+  <div id="statuses"></div>
+  
+  <script>
+    async function fetchData() {
+      try {
+        const response = await fetch('status.json');
+        const data = await response.json();
+        document.getElementById('metrics').innerHTML = `<strong>Metrics:</strong> ${data.metrics}`;
+        document.getElementById('revenue').innerHTML = `<strong>Revenue:</strong> ${data.revenue}`;
+        document.getElementById('statuses').innerHTML = `<strong>Status:</strong> ${JSON.stringify(data.scripts, null, 2)}`;
+      } catch (error) {
+        document.getElementById('statuses').innerHTML = 'Failed to load data';
+      }
+    }
+    
+    setInterval(fetchData, 30000);
+    fetchData();
+  </script>
+</body>
+</html>

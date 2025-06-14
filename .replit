@@ -1,7 +1,16 @@
+
 modules = ["python-base-3.13", "nodejs-20"]
 
-run = "bash scripts/setup.sh && python analytics/scripts/metrics.py"
-
+run = """
+bash scripts/setup.sh &
+bash scripts/replit.sync.sh &
+python analytics/scripts/metrics.py &
+python cloaking/scripts/cloak.py &
+python content/scripts/generate_presell.py &
+python financial/scripts/financial_tracking.py &
+python security/scripts/security_audit.py &
+python scripts/generate_status.py
+"""
 
 [nix]
 channel = "stable-24_05"
