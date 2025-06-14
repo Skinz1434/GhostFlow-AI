@@ -1,0 +1,1 @@
+run = "bash scripts/setup.sh && python main.py"
