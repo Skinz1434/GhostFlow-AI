@@ -1,0 +1,8 @@
+# Ignore generated status and revenue files
+analytics/scripts/*.status
+cloaking/scripts/*.status
+content/scripts/*.status
+financial/scripts/*.status
+financial/scripts/revenue.txt
+security/scripts/*.status
+status.json
