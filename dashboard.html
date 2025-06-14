@@ -1,13 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head><title>GhostFlow Status</title></head>
+<head>
+    <title>GhostFlow Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #scripts ul { list-style-type: none; padding: 0; }
+        #scripts li { margin: 4px 0; }
+    </style>
+</head>
 <body>
-<h1>GhostFlow AI Status</h1>
-<div id="status"></div>
-<script>
-fetch('status.json').then(r => r.json()).then(data => {
-  document.getElementById('status').innerText = 'Status: ' + data.status;
-});
-</script>
+    <h1>GhostFlow AI Dashboard</h1>
+    <div id="revenue">Loading...</div>
+    <div id="scripts"></div>
+    <script>
+        async function loadStatus() {
+            const res = await fetch('status.json');
+            const data = await res.json();
+            document.getElementById('revenue').innerText = 'Revenue: $' + data.revenue.toFixed(2);
+            let html = '<h3>Script Statuses</h3><ul>';
+            for (const [name, status] of Object.entries(data.scripts)) {
+                html += `<li>${name}: ${status}</li>`;
+            }
+            html += '</ul>';
+            document.getElementById('scripts').innerHTML = html;
+        }
+        loadStatus();
+        setInterval(loadStatus, 30000);
+    </script>
 </body>
 </html>

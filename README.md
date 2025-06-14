@@ -1,20 +1,26 @@
 # GhostFlow AI
 
 This repository contains a prototype of the GhostFlow AI automation system.
-It sets up directories for analytics, cloaking, content, financial, compliance and security scripts.
-The provided setup script generates placeholder scripts.
+It provides simple scripts for analytics, cloaking, content generation,
+financial tracking and security auditing.
 
 ## Setup
-Run the setup script to generate all required files:
+Run the setup script to create required directories:
 ```bash
 bash scripts/setup.sh
 ```
-Then execute the main program:
+
+## Running
+In a Replit environment the `.replit` file launches all core scripts and the
+GitHub sync service automatically. You can also run them manually:
 ```bash
-python main.py
+bash scripts/replit.sync.sh &
+python analytics/scripts/metrics.py &
+python cloaking/scripts/cloak.py &
+python content/scripts/generate_presell.py &
+python financial/scripts/financial_tracking.py &
+python security/scripts/security_audit.py &
+python scripts/generate_status.py
 ```
 
-To keep a Replit instance in sync with GitHub, run:
-```bash
-bash scripts/replit_sync.sh
-```
+Open `dashboard.html` in the Replit web view to see live metrics.

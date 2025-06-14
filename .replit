@@ -1,1 +1,10 @@
-run = "bash scripts/setup.sh && python main.py"
+run = """
+bash scripts/setup.sh &&
+bash scripts/replit.sync.sh &
+python analytics/scripts/metrics.py &
+python cloaking/scripts/cloak.py &
+python content/scripts/generate_presell.py &
+python financial/scripts/financial_tracking.py &
+python security/scripts/security_audit.py &
+python scripts/generate_status.py
+"""
