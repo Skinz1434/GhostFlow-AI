@@ -1,0 +1,28 @@
+name: Deploy GhostFlow AI
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Set up Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - name: Run setup
+      run: |
+        bash scripts/setup.sh
+    - name: Commit & Push generated scripts explicitly
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .
+        git commit -m "\ud83d\ude80 Automated push of GhostFlow AI scripts" || echo "Nothing to commit"
+        git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>GhostFlow Status</title></head>
+<body>
+<h1>GhostFlow AI Status</h1>
+<div id="status"></div>
+<script>
+fetch('status.json').then(r => r.json()).then(data => {
+  document.getElementById('status').innerText = 'Status: ' + data.status;
+});
+</script>
+</body>
+</html>
