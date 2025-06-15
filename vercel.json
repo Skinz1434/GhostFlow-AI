@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/functions/$1.ts" }
+  ]
+}

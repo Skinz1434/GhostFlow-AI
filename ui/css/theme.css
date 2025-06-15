@@ -1,0 +1,45 @@
+/* theme.css - Fully enhanced SkinZAI & QBit styling */
+
+:root {
+  --qbit-purple: #9155ff;
+  --qbit-blue: #00caff;
+  --qbit-bg: #0f0f10;
+  --qbit-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+  --qbit-text-color: #eaeaea;
+  --qbit-gradient: linear-gradient(135deg, var(--qbit-blue), var(--qbit-purple));
+  --qbit-border-radius: 16px;
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+body {
+  background: var(--qbit-bg);
+  color: var(--qbit-text-color);
+  margin: 0;
+  padding: 0;
+}
+
+button.primary {
+  background: var(--qbit-gradient);
+  border: none;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--qbit-border-radius);
+  box-shadow: var(--qbit-shadow);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.9);
+}
+
+a {
+  color: var(--qbit-blue);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--qbit-purple);
+}

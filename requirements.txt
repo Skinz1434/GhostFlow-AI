@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+openai>=1.0
+requests
+stripe
+python-dotenv
+cryptography
+bcrypt
+pandas
+numpy
+beautifulsoup4
+selenium
+markdown
+psycopg2-binary
+slack_sdk

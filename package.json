@@ -1,0 +1,40 @@
+{
+  "name": "ghostflow-ai",
+  "version": "1.0.0",
+  "description": "This repository hosts the monorepo for the **GhostFlow AI** project. It contains several modules organized by functional area, such as analytics, content management, and compliance. The structure is intentionally lightweight so each team can expand their module as needed.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"No tests available\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.28.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
+    "prettier": "^3.5.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "react-cookie-consent": "^9.0.0",
+    "stripe": "^14.0.0",
+    "dotenv": "^16.3.1"
+  }
+}

@@ -1,0 +1,22 @@
+name: KPI Alerts
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Check KPIs and send alerts
+        env:
+          PG_DSN: ${{ secrets.PG_DSN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: python analytics/scripts/kpi_alerts.py

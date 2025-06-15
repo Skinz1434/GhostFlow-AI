@@ -1,0 +1,22 @@
+name: Daily Content Publish
+
+on:
+  schedule:
+    - cron: "30 0 * * *"
+
+jobs:
+  publish-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Publish articles
+        env:
+          SITE_API_ENDPOINT: ${{ secrets.SITE_API_ENDPOINT }}
+          SITE_API_KEY: ${{ secrets.SITE_API_KEY }}
+        run: python bots/content_publisher.py
